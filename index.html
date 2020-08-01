@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Playing with large images on a canvas</title>
+</head>
+<body>
+  <h1>Canvas experiments</h1>
+  <p><a href="https://tosbourn.com/img/web-hosting.jpeg">Original image used for landscape tests</a> (6016 × 4016).  <a href="https://tosbourn.com/img/talkpay.jpg">Original image used for portrait tests</a> (1180 x 1710)</p>
+  <!-- <h2>Getting the image to display on a canvas element</h2>
+  <canvas id="just-image" width="600" height="600"></canvas>
+  <script>
+    var justCanvas = document.getElementById('just-image');
+    var justContext = justCanvas.getContext('2d');
+    var justImgObj = new Image();
+    justImgObj.src = 'https://tosbourn.com/img/web-hosting.jpeg';
+    justImgObj.onload = function(){
+      //Draw the image onto the canvas (starting at 0 top, 0 left).
+      justContext.drawImage(imgObj, 0, 0);
+    }
+  </script>
+
+  <h2>Scaling the mage</h2>
+  <p>Now we want the image to fit the 600x600 canvas</p>
+  <canvas id="scale-image" width="600" height="600"></canvas>
+  <script>
+    var canvas = document.getElementById('scale-image');
+    var context = canvas.getContext('2d');
+    var imgObj = new Image();
+    imgObj.src = 'https://tosbourn.com/img/web-hosting.jpeg';
+    imgObj.onload = function(){
+      scaleToFit(this);
+    }
+    function scaleToFit(img){
+      // get the scale
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      // get the top left position of the image
+      var x = (canvas.width / 2) - (img.width / 2) * scale;
+      var y = (canvas.height / 2) - (img.height / 2) * scale;
+      context.drawImage(img, x, y, img.width * scale, img.height * scale);
+    }
+  </script> -->
+
+  <!-- <h2>Removing white space</h2>
+
+  <p>We can now scale the image to our canvas, but there is white space above and below. We don't really want that</p>
+
+  <canvas id="scale-image-no-white-space" width="600" height="600"></canvas>
+  <script>
+    var canvasNoWhiteSpace = document.getElementById('scale-image-no-white-space');
+    var contextNoWhiteSpace = canvasNoWhiteSpace.getContext('2d');
+    var imgObjNoWhiteSpace = new Image();
+    imgObjNoWhiteSpace.src = 'https://tosbourn.com/img/web-hosting.jpeg';
+    imgObjNoWhiteSpace.onload = function(){
+      scaleToFitNoWhiteSpace(this);
+    }
+    function scaleToFitNoWhiteSpace(img){
+      var scale = Math.min(canvasNoWhiteSpace.width / img.width, canvasNoWhiteSpace.height / img.height);
+      canvasNoWhiteSpace.height = img.height * scale;
+      canvasNoWhiteSpace.width = img.width * scale;
+      contextNoWhiteSpace.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+    }
+  </script> -->
+
+  <!-- <h2>Verify this also works for portrait pictures</h2>
+  <canvas id="scale-image-no-white-space-portrait" width="600" height="600"></canvas>
+  <script>
+    var canvasNoWhiteSpacePortrait = document.getElementById('scale-image-no-white-space-portrait');
+    var contextNoWhiteSpacePortrait = canvasNoWhiteSpacePortrait.getContext('2d');
+    var imgObjNoWhiteSpacePortrait = new Image();
+    imgObjNoWhiteSpacePortrait.src = 'https://tosbourn.com/img/talkpay.jpg';
+    imgObjNoWhiteSpacePortrait.onload = function(){
+      scaleToFitNoWhiteSpacePortrait(this);
+    }
+    function scaleToFitNoWhiteSpacePortrait(img){
+      var scale = Math.min(canvasNoWhiteSpacePortrait.width / img.width, canvasNoWhiteSpacePortrait.height / img.height);
+      console.log(img.height, img.width, scale);
+      canvasNoWhiteSpacePortrait.height = img.height * scale;
+      canvasNoWhiteSpacePortrait.width = img.width * scale;
+      contextNoWhiteSpacePortrait.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+    }
+  </script> -->
+
+  <h2>Getting PNG data out of Canvas</h2>
+
+  <canvas id="png" width="600" height="600"></canvas>
+  <h3>PNG ouput (as image)</h3>
+  <img id="png-output" />
+  <script>
+    var canvasPNG = document.getElementById('png');
+    var outputPNG = document.getElementById('png-output');
+    var contextPNG = canvasPNG.getContext('2d');
+    var imgObjPNG = new Image();
+    imgObjPNG.src = 'https://tosbourn.com/img/web-hosting.jpeg';
+    imgObjPNG.crossOrigin = "anonymous";
+    imgObjPNG.onload = function(){
+      scaleToFitPNG(this);
+    }
+    function scaleToFitPNG(img){
+      var scale = Math.min(canvasPNG.width / img.width, canvasPNG.height / img.height);
+      canvasPNG.height = img.height * scale;
+      canvasPNG.width = img.width * scale;
+      contextPNG.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+      outputPNG.src = canvasPNG.toDataURL("image/png");
+    }
+  </script>
+
+  <h2>Image Upload</h2>
+  <p>Handle arbitrary image file uploads</p>
+  <form>
+    <input type="file" id="file-upload" onchange="uploadImage()">
+  </form>
+  <canvas id="upload" width="600" height="600"></canvas>
+  <h3>PNG ouput (as image)</h3>
+  <img id="upload-output" />
+  <script>
+    function uploadImage() {
+      var reader = new FileReader();
+      var input = document.getElementById('file-upload');
+
+      reader.onload = function(e) {
+
+        var canvasUpload = document.getElementById('upload');
+        var outputUpload = document.getElementById('upload-output');
+        var contextUpload = canvasUpload.getContext('2d');
+        var imgObjUpload = new Image();
+        imgObjUpload.src = e.target.result;
+        imgObjUpload.crossOrigin = "anonymous";
+        imgObjUpload.onload = function(){
+          scaleToFitUpload(this);
+        }
+        function scaleToFitUpload(img){
+          var scale = Math.min(canvasUpload.width / img.width, canvasUpload.height / img.height);
+          canvasUpload.height = img.height * scale;
+          canvasUpload.width = img.width * scale;
+          contextUpload.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+          outputUpload.src = canvasUpload.toDataURL("image/png");
+        }
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  </script>
+
+  <h2>TODO - Smoother small images</h2>
+  <p>On a quick glance, it looks like uploading images via the FileReader seems to degrade them</p>
+  <h2>TODO - Rotating the image</h2>
+  <p>One of the features we need is image rotation</p>
+
+  <h2>What I have learned</h2>
+  <ul>
+    <li>Just putting an image into a canvas will overflow</li>
+    <li>Reusing code between canvas elements can lead to the first element not getting populated</li>
+    <li>Changing a canvas property (like height or length) will remove the contents of the canvas</li>
+    <li><code>toDataURL</code> cares about CORS, <code>crossOrigin = 'anonymous' fixes locally</code></li>
+  </ul>
+</body>
+</html>
